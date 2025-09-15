@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Search } from "lucide-react";
-
+import axios from "axios";
 export default function AlumniLanding() {
   const [state, setState] = useState({
     showSignup: false,
@@ -60,7 +60,16 @@ export default function AlumniLanding() {
 
     setState((s) => ({ ...s, loading: true, message: "" }));
     await new Promise((r) => setTimeout(r, 800));
-
+    let obj=state.form;
+    let url="http://localhost:2025/user/signup";
+    let resp= await axios.post(url,obj,{headers:{"Content-Type":"application/x-www-form-urlencoded"}});
+    if(resp.data.status==true)
+    {
+      alert(resp.data.msg);
+      alert("please login to continue");
+    }
+    else
+      alert(resp.data.msg);
     const newProfile = {
       id: cryptoRandomId(),
       name: fullName,
@@ -89,7 +98,7 @@ export default function AlumniLanding() {
     }
     setState((s) => ({ ...s, loading: true, message: "" }));
     await new Promise((r) => setTimeout(r, 600));
-
+    
     const profile = state.profiles[0];
     setState((s) => ({
       ...s,
